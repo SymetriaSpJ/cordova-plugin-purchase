@@ -2051,6 +2051,8 @@ InAppBilling.prototype.init = function (success, fail, options, skus) {
 			hasSKUs = true;
 		}
 	}
+	
+	console.log('STORE SUCCESS CB', success);
 
 	if (hasSKUs) {
 		console.log('STORE HAS SKUs');
@@ -2092,6 +2094,7 @@ InAppBilling.prototype.consumePurchase = function (success, fail, productId, tra
 	return cordova.exec(success, errorCb(fail), "InAppBillingPlugin", "consumePurchase", [productId, transactionId]);
 };
 InAppBilling.prototype.getAvailableProducts = function (success, fail) {
+	console.log('STORE GET AVAILABLE PRODUCTS');
 	if (this.options.showLog) {
 		log('getAvailableProducts called!');
 	}
