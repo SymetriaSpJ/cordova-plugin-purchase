@@ -64,11 +64,14 @@ public class InAppBillingPlugin extends CordovaPlugin {
 	   			 }
 				}
 				// Initialize
+				Log.d(TAG, "init() init(sku)");
 				init(sku);
 			} else if ("getPurchases".equals(action)) {
 				// Get the list of purchases
 				JSONArray jsonSkuList = new JSONArray();
+				Log.d(TAG, "getPurchases() before");
 				jsonSkuList = getPurchases();
+				Log.d(TAG, "getPurchases() after");
 	            // Call the javascript back
 	            callbackContext.success(jsonSkuList);
 			} else if ("buy".equals(action)) {
@@ -114,7 +117,9 @@ public class InAppBillingPlugin extends CordovaPlugin {
 			} else if ("getAvailableProducts".equals(action)) {
 				// Get the list of purchases
 				JSONArray jsonSkuList = new JSONArray();
+				Log.d(TAG, "getAvailableProducts() before");
 				jsonSkuList = getAvailableProducts();
+				Log.d(TAG, "getAvailableProducts() after");
 	            // Call the javascript back
 	            callbackContext.success(jsonSkuList);
 			} else if ("getProductDetails".equals(action)) {
@@ -128,12 +133,15 @@ public class InAppBillingPlugin extends CordovaPlugin {
    			 }
 				getProductDetails(sku);
 			} else {
+				Log.d(TAG, "isValidActio false");
 				// No handler for the action
 				isValidAction = false;
 			}
 		} catch (IllegalStateException e){
+			Log.d(TAG, "IllegalStateException" + e.getMessage());
 			callbackContext.error(IabHelper.ERR_UNKNOWN + "|" + e.getMessage());
 		} catch (JSONException e){
+			Log.d(TAG, "JSONException" + e.getMessage());
 			callbackContext.error(IabHelper.ERR_UNKNOWN + "|" + e.getMessage());
 		}
 
@@ -279,6 +287,7 @@ public class InAppBillingPlugin extends CordovaPlugin {
 	private JSONArray getAvailableProducts(){
 		// Get the list of owned items
 		if(myInventory == null){
+			Log.d(TAG, "Billing plugin was not initialized");
 			callbackContext.error(IabHelper.ERR_LOAD + "|Billing plugin was not initialized");
 			return new JSONArray();
 		}
@@ -292,6 +301,7 @@ public class InAppBillingPlugin extends CordovaPlugin {
 	        	jsonSkuList.put(sku.toJson());
 	        }
 		}catch (JSONException e){
+			Log.d(TAG, "SKUDetails ERROR: "+e.getMessage());
 			callbackContext.error(IabHelper.ERR_LOAD + "|" + e.getMessage());
 		}
 		return jsonSkuList;
@@ -300,6 +310,7 @@ public class InAppBillingPlugin extends CordovaPlugin {
 	//Get SkuDetails for skus
 	private void getProductDetails(final List<String> skus){
 		if (mHelper == null){
+			Log.d(TAG, "Billing plugin was not initialized");
 			callbackContext.error(IabHelper.ERR_LOAD + "|Billing plugin was not initialized");
 			return;
 		}
