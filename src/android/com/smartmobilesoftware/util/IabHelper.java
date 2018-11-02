@@ -1027,14 +1027,14 @@ public class IabHelper {
     }
 
     void logDebug(String msg) {
-        if (mDebugLog) Log.d(mDebugTag, msg);
+        Log.d("CordovaPurchase", msg);
     }
 
     void logError(String msg) {
-        Log.e(mDebugTag, "In-app billing error: " + msg);
+        Log.e("CordovaPurchase", "In-app billing error: " + msg);
     }
 
     void logWarn(String msg) {
-        Log.w(mDebugTag, "In-app billing warning: " + msg);
+        Log.w("CordovaPurchase", "In-app billing warning: " + msg);
     }
 }
