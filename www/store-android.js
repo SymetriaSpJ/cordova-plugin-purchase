@@ -1434,6 +1434,7 @@ store._validator = function(product, callback, isPrepared) {
 var initialRefresh = true;
 
 store.refresh = function() {
+	console.log('REFRESH', initialRefresh);
 
     store.trigger("refreshed");
     if (initialRefresh) {
@@ -2162,6 +2163,7 @@ var initialized = false;
 var skus = [];
 
 store.when("refreshed", function() {
+	console.log('STORE REFRESHED');
     if (!initialized) init();
 });
 
@@ -2188,12 +2190,15 @@ var BILLING_RESPONSE_RESULT = {
 };
 
 function init() {
+	console.log('STORE init()', initialized);
     if (initialized) return;
     initialized = true;
 
     for (var i = 0; i < store.products.length; ++i)
         skus.push(store.products[i].id);
 
+	console.log('STORE init products', skus);
+	
     store.inappbilling.init(iabReady,
         function(err) {
             initialized = false;
@@ -2201,6 +2206,7 @@ function init() {
                 code: store.ERR_SETUP,
                 message: 'Init failed - ' + err
             });
+	    console.log('STORE INIT FAILED', err);
         },
         {
             showLog: store.verbosity >= store.DEBUG ? true : false
