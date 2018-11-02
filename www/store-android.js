@@ -2210,16 +2210,19 @@ function init() {
 
 function iabReady() {
     store.log.debug("plugin -> ready");
+    console.log('STORE plugin -> ready');
     store.inappbilling.getAvailableProducts(iabLoaded, function(err) {
         store.error({
             code: store.ERR_LOAD,
             message: 'Loading product info failed - ' + err
         });
+	console.log('STORE Loading product info failed - ' + err);
     });
 }
 
 function iabLoaded(validProducts) {
     store.log.debug("plugin -> loaded - " + JSON.stringify(validProducts));
+	console.log('STORE plugin -> loaded');
     var p, i;
     for (i = 0; i < validProducts.length; ++i) {
 
@@ -2237,6 +2240,7 @@ function iabLoaded(validProducts) {
                 currency: validProducts[i].price_currency_code ? validProducts[i].price_currency_code : "",
                 state: store.VALID
             });
+		console.log('STORE LOADED', p);
             p.trigger("loaded");
         }
     }
@@ -2244,6 +2248,7 @@ function iabLoaded(validProducts) {
         p = store.products.byId[skus[i]];
         if (p && !p.valid) {
             p.set("state", store.INVALID);
+		console.log('STORE LOADED INVALID', p);
             p.trigger("loaded");
         }
     }
