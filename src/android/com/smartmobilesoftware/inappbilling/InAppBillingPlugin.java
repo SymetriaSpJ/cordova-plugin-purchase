@@ -376,13 +376,16 @@ public class InAppBillingPlugin extends CordovaPlugin {
 
     // Check if there is any errors in the iabResult and update the inventory
     private Boolean hasErrorsAndUpdateInventory(IabResult result, Inventory inventory){
+	    Log.d(TAG, "HAS ERRORS?");
     	if (result.isFailure()) {
+		Log.d(TAG, "Failed to query inventory: " + result.getResponse());
         	callbackContext.error(result.getResponse() + "|Failed to query inventory: " + result);
         	return true;
         }
 
         // Have we been disposed of in the meantime? If so, quit.
         if (mHelper == null) {
+		Log.d(TAG, "The billing helper has been disposed");
         	callbackContext.error(IabHelper.ERR_LOAD + "|The billing helper has been disposed");
         	return true;
         }
