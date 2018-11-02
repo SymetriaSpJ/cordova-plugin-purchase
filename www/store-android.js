@@ -2012,12 +2012,14 @@ var log = function (msg) {
 };
 
 var InAppBilling = function () {
-    this.options = {};
+    this.options = { showLog: true };
 };
 
 InAppBilling.prototype.init = function (success, fail, options, skus) {
 	if (!options)
         options = {};
+	
+	console.log('STORE INAPP INIT!');
 
 	this.options = {
 		showLog: options.showLog !== false
@@ -2153,7 +2155,9 @@ window.inappbilling = new InAppBilling();
 try {
     store.inappbilling = window.inappbilling;
 }
-catch (e) {}
+catch (e) {
+    console.log('STORE INAPP ERROR', e);
+}
 
 })();
 (function() {
@@ -2197,7 +2201,9 @@ function init() {
     for (var i = 0; i < store.products.length; ++i)
         skus.push(store.products[i].id);
 
-	console.log('STORE init products', skus);
+    console.log('STORE init products', skus);
+    console.log('STORE inappbilling init', store.inappbilling.init);	
+	console.log('STORE inappbilling', store.inappbilling);
 	
     store.inappbilling.init(iabReady,
         function(err) {
