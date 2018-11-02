@@ -2022,7 +2022,7 @@ InAppBilling.prototype.init = function (success, fail, options, skus) {
 	console.log('STORE INAPP INIT!');
 
 	this.options = {
-		showLog: options.showLog !== false
+		showLog: true
 	};
 
 	if (this.options.showLog) {
@@ -2030,6 +2030,7 @@ InAppBilling.prototype.init = function (success, fail, options, skus) {
 	}
 
 	var hasSKUs = false;
+	console.log('STORE INAPP SKUS', skus);
 	//Optional Load SKUs to Inventory.
 	if(typeof skus !== "undefined"){
 		if (typeof skus === "string") {
@@ -2052,10 +2053,12 @@ InAppBilling.prototype.init = function (success, fail, options, skus) {
 	}
 
 	if (hasSKUs) {
+		console.log('STORE HAS SKUs');
 		cordova.exec(success, errorCb(fail), "InAppBillingPlugin", "init", [skus]);
     }
 	else {
         //No SKUs
+		console.log('STORE NO SKUs');
 		cordova.exec(success, errorCb(fail), "InAppBillingPlugin", "init", []);
     }
 };
@@ -2202,8 +2205,7 @@ function init() {
         skus.push(store.products[i].id);
 
     console.log('STORE init products', skus);
-    console.log('STORE inappbilling init', store.inappbilling.init);	
-	console.log('STORE inappbilling', store.inappbilling);
+	console.log('STORE init products', skus.slice(0));
 	
     store.inappbilling.init(iabReady,
         function(err) {
