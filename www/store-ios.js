@@ -627,7 +627,7 @@ store.Product.prototype.verify = function() {
     });
 
     // For some reason, the appStoreReceipt isn't always immediately available.
-    delay(this, tryValidation, 1000);
+    delay(this, tryValidation, 3000);
 
     /// ##### return value
     /// A Promise with the following methods:
@@ -1140,7 +1140,6 @@ var callbackId = 0;
 /// the purchase process.
 ///
 store.order = function(pid, additionalData) {
-
     var p = pid;
 
     if (typeof pid === "string") {
