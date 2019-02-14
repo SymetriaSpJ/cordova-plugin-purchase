@@ -562,14 +562,17 @@ store.Product.prototype.verify = function() {
 
         store._validator(that, function(success, data) {
             store.log.debug("verify -> " + JSON.stringify(success));
+            console.log("verify -> " + JSON.stringify(success));
             if (success) {
                 store.log.debug("verify -> success: " + JSON.stringify(data));
+                console.log("verify -> success: " + JSON.stringify(data));
                 store.utils.callExternal('verify.success', successCb, that, data);
                 store.utils.callExternal('verify.done', doneCb, that);
                 that.trigger("verified");
             }
             else {
                 store.log.debug("verify -> error: " + JSON.stringify(data));
+                console.log("verify -> error: " + JSON.stringify(data));
                 var msg = (data && data.error && data.error.message ? data.error.message : '');
                 var err = new store.Error({
                     code: store.ERR_VERIFICATION_FAILED,
@@ -589,6 +592,7 @@ store.Product.prototype.verify = function() {
                         });
                     }
                     else {
+                        console.log('Error: other than expired', err);
                         store.error(err);
                         store.utils.callExternal('verify.error', errorCb, err);
                         store.utils.callExternal('verify.done', doneCb, that);
@@ -604,6 +608,7 @@ store.Product.prototype.verify = function() {
                 }
                 else {
                     store.log.debug("validation failed 5 times, stop retrying, trigger an error");
+                    console.log("validation failed 5 times, stop retrying, trigger an error");
                     store.error(err);
                     store.utils.callExternal('verify.error', errorCb, err);
                     store.utils.callExternal('verify.done', doneCb, that);
@@ -619,6 +624,7 @@ store.Product.prototype.verify = function() {
                 code: store.ERR_VERIFICATION_FAILED,
                 message: "Product isn't in the APPROVED state"
             });
+            console.log('Product is not in the approved state');
             store.error(err);
             store.utils.callExternal('verify.error', errorCb, err);
             store.utils.callExternal('verify.done', doneCb, that);
@@ -627,6 +633,7 @@ store.Product.prototype.verify = function() {
     });
 
     // For some reason, the appStoreReceipt isn't always immediately available.
+    console.log('waiting for validation');
     delay(this, tryValidation, 3000);
 
     /// ##### return value
