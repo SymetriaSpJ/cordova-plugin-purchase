@@ -31,7 +31,8 @@ SOFTWARE.
     <name>Purchase</name>
 	<description>Cordova Purchase plugin for iOS (AppStore), Android (PlayStore) and Windows</description>
     <engines>
-        <engine name="cordova" version=">=2.4.0" />
+        <engine name="cordova" version=">=6.0.0" />
+        <engine name="cordova-android" version=">=4.0.0" />
     </engines>
     <repo>https://github.com/j3k0/cordova-plugin-purchase.git</repo>
     <issue>https://github.com/j3k0/cordova-plugin-purchase/issues</issue>
@@ -73,9 +74,15 @@ SOFTWARE.
             <clobbers target="store" />
         </js-module>
 
-        <config-file target="AndroidManifest.xml" parent="/manifest">
+        <config-file target="AndroidManifest.xml" parent="/*">
             <!-- In-App Billing Permission -->
             <uses-permission android:name="com.android.vending.BILLING" />
+        </config-file>
+
+
+        <source-file src="src/android/billing_key_param.xml" target-dir="res/values/" />
+        <config-file target="res/values/billing_key_param.xml" parent="/*">
+            <string name="billing_key_param">$BILLING_KEY</string>
         </config-file>
 
         <!-- Cordova >= 3.0.0 -->
@@ -85,10 +92,7 @@ SOFTWARE.
 			</feature>
         </config-file>
 
-        <source-file src="src/android/billing_key_param.xml" target-dir="res/values/" />
-        <config-file target="res/values/billing_key_param.xml" parent="/*">
-            <string name="billing_key_param">$BILLING_KEY</string>
-        </config-file>
+
 
         <!-- In-app Billing Library -->
 		<source-file src="src/android/com/android/vending/billing/IInAppBillingService.aidl" target-dir="src/com/android/vending/billing" />
