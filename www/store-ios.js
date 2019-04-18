@@ -2427,7 +2427,10 @@ InAppPurchase.prototype.processPendingUpdates = function() {
 // Note that it may eventually be called before initialization... unfortunately.
 // In this case, we'll just keep pending updates in a list for later processing.
 InAppPurchase.prototype.updatedTransactionCallback = function (state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt) {
-
+	console.log('UPDATE TRANSACTION', state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt);
+	
+	return;
+	
     if (!initialized) {
         var args = Array.prototype.slice.call(arguments);
         pendingUpdates.push(args);
