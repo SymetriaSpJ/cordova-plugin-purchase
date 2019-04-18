@@ -2429,7 +2429,7 @@ InAppPurchase.prototype.processPendingUpdates = function() {
 InAppPurchase.prototype.updatedTransactionCallback = function (state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt) {
 	console.log('UPDATE TRANSACTION', state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt);
 	
-	//return;
+	return;
 	
     if (!initialized) {
         var args = Array.prototype.slice.call(arguments);
