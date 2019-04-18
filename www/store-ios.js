@@ -2429,7 +2429,7 @@ InAppPurchase.prototype.processPendingUpdates = function() {
 InAppPurchase.prototype.updatedTransactionCallback = function (state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt) {
 	console.log('UPDATE TRANSACTION', state, errorCode, errorText, transactionIdentifier, productId, transactionReceipt);
 	
-	return;
+	//return;
 	
     if (!initialized) {
         var args = Array.prototype.slice.call(arguments);
@@ -2977,7 +2977,7 @@ function storekitPurchasing(productId) {
 //! with the order's transaction identifier.
 //!
 function storekitPurchased(transactionId, productId) {
-    store.ready(function() {
+    //store.ready(function() {
         var product = store.get(productId);
         if (!product) {
             store.error({
@@ -3005,7 +3005,7 @@ function storekitPurchased(transactionId, productId) {
         product.transactions.push(transactionId);
         store.log.info("ios -> transaction " + transactionId + " purchased (" + product.transactions.length + " in the queue for " + productId + ")");
         product.set("state", store.APPROVED);
-    });
+    //});
 }
 
 //! ### <a name="storekitError"></a> *storekitError()*
