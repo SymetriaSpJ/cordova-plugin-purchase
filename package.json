@@ -1,5 +1,5 @@
 {
-  "name": "cc.fovea.cordova.purchase",
+  "name": "fitatu.cordova.purchase",
   "version": "7.4.3",
   "description": "Cordova Purchase plugin for iOS and Android (AppStore and PlayStore)",
   "cordova": {
