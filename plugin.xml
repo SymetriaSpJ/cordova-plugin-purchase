@@ -69,6 +69,8 @@ SOFTWARE.
 
     <!-- android -->
     <platform name="android">
+        <hook type="before_plugin_install" src="scripts/androidBeforeInstall.js" />
+
         <preference name="BILLING_KEY" />
 
         <js-module src="www/store-android.js" name="InAppBillingPlugin">
