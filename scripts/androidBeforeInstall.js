@@ -12,8 +12,8 @@ var xmlContent = "<?xml version='1.0' encoding='utf-8'?>\n"
   + '</resources>\n';
 
 module.exports = function (ctx) {
-  var fs = ctx.requireCordovaModule('fs');
-  var path = ctx.requireCordovaModule('path');
+  var fs = require('fs');
+  var path = require('path');
   var platformRoot = path.join(ctx.opts.projectRoot,
     'platforms' + path.sep + 'android');
   var resDir = path.join('res', 'values');
