@@ -5,7 +5,7 @@ var store = require("../tmp/store-test");
 var helper = require("./helper");
 
 (function() {
-"use strict";
+
 global.store = store;
 global.document = {
     addEventListener: function(/*event, callback*/) {}
@@ -20,7 +20,7 @@ global.storekit = {
         this.initCalled = (this.initCalled || 0) + 1;
         if (this.initShouldFail) {
             this.initialized = false;
-            error(storekit.ERR_SETUP, "setup");
+            error(store.ERR_SETUP, "setup");
         }
         else {
             this.initialized = true;
@@ -33,7 +33,7 @@ global.storekit = {
         this.loadCalled = (this.loadCalled || 0) + 1;
         if (this.loadShouldFail) {
             this.loaded = false;
-            error(storekit.ERR_LOAD, "load");
+            error(store.ERR_LOAD, "load");
         }
         else {
             this.loaded = true;
@@ -58,7 +58,7 @@ global.storekit = {
 })();
 
 describe('iOS', function(){
-    "use strict";
+    
 
     before(helper.resetTest);
     after(helper.resetTest);

@@ -1,5 +1,5 @@
 (function() {
-"use strict";
+
 
 // Store all pending callbacks, prevents promises to be called multiple times.
 var callbacks = {};
@@ -20,11 +20,28 @@ var callbackId = 0;
 ///
 /// The `additionalData` argument can be either:
 ///  - null
-///  - object with attribute `oldPurchasedSkus`, a string array with the old subscription to upgrade/downgrade on Android. See: [android developer](https://developer.android.com/google/play/billing/billing_reference.html#upgrade-getBuyIntentToReplaceSkus) for more info
-///  - object with attribute `developerPayload`, string representing the developer payload as described in [billing best practices](https://developer.android.com/google/play/billing/billing_best_practices.html)
+///  - object with attributes:
+///    - `oldSku`, a string with the old subscription to upgrade/downgrade on Android.
+///      **Note**: if another subscription product is already owned that is member of
+///      the same group, `oldSku` will be set automatically for you (see `product.group`).
+///    - `prorationMode`, a string that describe the proration mode to apply when upgrading/downgrading a subscription (with `oldSku`) on Android. See https://developer.android.com/google/play/billing/subs#change
+///      **Possible values:**
+///       - `DEFERRED` - Replacement takes effect when the old plan expires, and the new price will be charged at the same time.
+///       - `IMMEDIATE_AND_CHARGE_PRORATED_PRICE` - Replacement takes effect immediately, and the billing cycle remains the same.
+///       - `IMMEDIATE_WITHOUT_PRORATION` - Replacement takes effect immediately, and the new price will be charged on next recurrence time.
+///       - `IMMEDIATE_WITH_TIME_PRORATION` - Replacement takes effect immediately, and the remaining time will be prorated and credited to the user.
+///    - `discount`, a object that describes the discount to apply with the purchase (iOS only):
+///       - `id`, discount identifier
+///       - `key`, key identifier
+///       - `nonce`, uuid value for the nonce
+///       - `timestamp`, time at which the signature was generated (in milliseconds since epoch)
+///       - `signature`, cryptographic signature that unlock the discount
 ///
 /// See the ["Purchasing section"](#purchasing) to learn more about
 /// the purchase process.
+///
+/// See ["Subscriptions Offer Best Practices"](https://developer.apple.com/videos/play/wwdc2019/305/)
+/// for more details on subscription offers.
 ///
 store.order = function(pid, additionalData) {
 
@@ -40,8 +57,23 @@ store.order = function(pid, additionalData) {
             });
         }
     }
-    if (additionalData) {
-        p.additionalData = additionalData;
+
+    var a; // short name for additionalData
+    if (additionalData && typeof additionalData === 'object') {
+        a = p.additionalData = Object.assign({}, additionalData);
+    }
+    else {
+        a = p.additionalData = {};
+    }
+
+    // Associate the active user with the purchase
+    if (!a.applicationUsername) {
+        a.applicationUsername = store.getApplicationUsername(p);
+    }
+
+    // Let the platform extend additional data
+    if (store.extendAdditionalData) {
+        store.extendAdditionalData(p);
     }
 
     var localCallbackId = callbackId++;
@@ -55,7 +87,9 @@ store.order = function(pid, additionalData) {
 
     // Request the purchase.
     store.ready(function() {
-        p.set("state", store.REQUESTED);
+        p.push({
+            state: store.REQUESTED
+        });
     });
 
     /// ### return value
@@ -90,10 +124,7 @@ store.order = function(pid, additionalData) {
     ///
 };
 
-///
-/// As usual, you can unregister the callbacks by using [`store.off()`](#off).
-///
-
+//
 // Remove pending callbacks registered with `order`
 store.order.unregister = function(cb) {
     for (var i in callbacks) {
